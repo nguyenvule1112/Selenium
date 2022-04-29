@@ -84,9 +84,31 @@ public class oanda {
     }
 
     @Test
-    public void source_cureny(){
+    public void source_currency(){
         //Webelement
-        WebElement source1 = this.driver.findElement(By.xpath("(//div[contains(@class, \"MuiAutocomplete-root\")])[1]"));
+        String currency1 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiOutlinedInput-adornedStart\")]/div/div)[1]")).getText();
+        String currency2 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiOutlinedInput-adornedStart\")]/div/div)[2]")).getText();
+
+        WebElement source1 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[1]"));
+        source1.click();
+        WebElement Currencypicker1 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]"));
+        boolean Currencypicker1display = Currencypicker1.isDisplayed();
+        String currencydefault1 = this.driver.findElement(By.xpath("//li[@id=\"baseCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
+
+        WebElement source2 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[2]"));
+        source2.click();
+        WebElement Currencypicker2 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]"));
+        boolean Currencypicker2display = Currencypicker2.isDisplayed();
+        String currencydefault2 = this.driver.findElement(By.xpath("//li[@id=\"quoteCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
+
+
+        //Assert
+        Assert.assertTrue(Currencypicker1display);
+        Assert.assertTrue(Currencypicker2display);
+        Assert.assertEquals(currency1,currencydefault1);
+        Assert.assertEquals(currency2,currencydefault2);
     }
 
+    @Test
+    public void
 }
