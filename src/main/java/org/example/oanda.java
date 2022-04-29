@@ -30,38 +30,63 @@ public class oanda {
     }
 
      public boolean getButtonStatus() {
-         return this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div/div/div[2]/button[1]")).isEnabled();
+         return this.driver.findElement(By.cssSelector("div.MuiInputAdornment-positionEnd button[class*=\"cc33\"]")).isEnabled();
      }
 
     @Test
-    public void datenow() throws InterruptedException {
+    public void check_datenow_and_check_next_button() throws InterruptedException {
+        //webb element
+        WebElement pickdate = this.driver.findElement(By.cssSelector("div.react-datepicker__input-container input"));
+        WebElement buttonnext = this.driver.findElement(By.cssSelector("div.MuiInputAdornment-positionEnd button[class*=\"cc33\"]"));
+        WebElement buttonback = this.driver.findElement(By.cssSelector("div.MuiInputAdornment-positionStart button[class*=\"cc33\"]"));
+        // get value to check
         String pattern = "dd MMMM yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String expect = simpleDateFormat.format(new Date());
-        String ngayht = this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div/div/input")).getAttribute("value");
-        Assert.assertEquals(expect,ngayht);
-        boolean buttonnext = this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div/div/div[2]/button[1]")).isEnabled();
-        Assert.assertFalse(this.getButtonStatus());
+        String expectdatenow = simpleDateFormat.format(new Date());
+        String actualdatenow = pickdate.getAttribute("value");
+        boolean actualnextbutton1 = buttonnext.isEnabled();
 
-        //enable khi ngày quá khứ.
-        this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div/div/div[1]/button")).click();
-        Assert.assertTrue(this.getButtonStatus());
+        buttonback.click();
+        WebElement datepicker= this.driver.findElement(By.cssSelector("div.react-datepicker"));
+        boolean actualnextbutton2= buttonnext.isEnabled();
+        boolean datepickerenable = datepicker.isDisplayed();
 
-        //datepicker enable
-        boolean datepicker= this.driver.findElement(By.cssSelector("div.react-datepicker")).isEnabled();
-        Assert.assertTrue(datepicker);
+
+        //Assert
+        Assert.assertEquals(expectdatenow,actualdatenow);
+        Assert.assertFalse(actualnextbutton1);
+        Assert.assertTrue(actualnextbutton2);
+        Assert.assertTrue(datepickerenable);
+
     }
 
     @Test
     public void pickdate (){
-        this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div")).click();
-        WebElement pickday = this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[3]/div/div/div[2]/div[2]/div[2]/div[3]"));
+        //Webelement
+        WebElement pickdate = this.driver.findElement(By.cssSelector("div.react-datepicker__input-container input"));
+        pickdate.click();
+        WebElement pickday = this.driver.findElement(By.cssSelector("div.react-datepicker__week div[class*=\"react-datepicker__day--020\"]"));
+
+        //get value
         String daychoose = pickday.getText();
         pickday.click();
-        System.out.println(daychoose);
-        String newday = this.driver.findElement(By.xpath("//*[@id=\"cc-main-conversion-block\"]/div/div[3]/div[1]/div[2]/div/div/input")).getText();
+        String actualdate = pickdate.getAttribute("value");
+        String[] displayday = actualdate.split(" ");
 
+       //Khai báo pattern DD MMMM YYYY
+        String pattern = "dd MMMM yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String expectdatechoose = simpleDateFormat.format(new Date("04/20/2022"));
+
+        //Assert
+        Assert.assertEquals(displayday[0],daychoose);
+        Assert.assertEquals(expectdatechoose,actualdate);
     }
 
+    @Test
+    public void source_cureny(){
+        //Webelement
+        WebElement source1 = this.driver.findElement(By.xpath("(//div[contains(@class, \"MuiAutocomplete-root\")])[1]"));
+    }
 
 }

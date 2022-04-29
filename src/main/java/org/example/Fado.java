@@ -103,7 +103,7 @@ public class Fado {
         String colorbdExpectpw = "#e1e1e1";
         Assert.assertEquals(colorbdhexpw, colorbdExpectpw);
     }
-    @Test
+    @Test   //lỗi
     public void saitaikhoan() throws InterruptedException {
         WebElement tbusername = this.driver.findElement(By.cssSelector("input[type=\"email\"]"));
         tbusername.sendKeys("nguyenvule11245@gmail.com");
@@ -119,7 +119,7 @@ public class Fado {
 //
 
     }
-    @Test
+    @Test ///lỗi
     public void saipassword(){
         WebElement tbusername = this.driver.findElement(By.cssSelector("input[type=\"email\"]"));
         tbusername.sendKeys("nguyenvule1112@gmail.com");

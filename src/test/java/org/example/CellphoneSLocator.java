@@ -76,7 +76,7 @@ public class CellphoneSLocator {
 
         this.driver.get("http://testmaster.vn/admin");
         WebElement tbTMSUsername = this.driver.findElement(By.cssSelector("input[type=\"email\"]"));
-        tbTMSUsername.sendKeys("khanh.tx@live.com");
+        tbTMSUsername.sendKeys("nguyen@live.com");
         WebElement tbTMSPwd = this.driver.findElement(By.cssSelector("input[type=\"password\"]"));
         tbTMSPwd.sendKeys("abc123");
 
