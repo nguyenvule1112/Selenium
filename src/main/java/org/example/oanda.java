@@ -9,8 +9,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 
 public class oanda {
@@ -21,6 +25,7 @@ public class oanda {
         this.driver = new ChromeDriver();
         this.driver.manage().window().maximize();
         this.driver.get("https://www.oanda.com/currency-converter/en/?from=EUR&to=USD&amount=1");
+
     }
 
     @After
@@ -91,24 +96,48 @@ public class oanda {
 
         WebElement source1 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[1]"));
         source1.click();
-        WebElement Currencypicker1 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]"));
-        boolean Currencypicker1display = Currencypicker1.isDisplayed();
-        String currencydefault1 = this.driver.findElement(By.xpath("//li[@id=\"baseCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
+        boolean Currencypicker1 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]")).isDisplayed();
+        String currencydefault1 = this.driver.findElement(By.xpath
+                ("//li[@id=\"baseCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
 
         WebElement source2 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[2]"));
         source2.click();
-        WebElement Currencypicker2 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]"));
-        boolean Currencypicker2display = Currencypicker2.isDisplayed();
-        String currencydefault2 = this.driver.findElement(By.xpath("//li[@id=\"quoteCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
-
-
+        boolean Currencypicker2 = this.driver.findElement(By.cssSelector("div[role=\"presentation\"]")).isDisplayed();
+        String currencydefault2 = this.driver.findElement(By.xpath
+                ("//li[@id=\"quoteCurrency_currency_autocomplete-option-0\"]//span[1]")).getText();
         //Assert
-        Assert.assertTrue(Currencypicker1display);
-        Assert.assertTrue(Currencypicker2display);
+        Assert.assertTrue(Currencypicker1);
+        Assert.assertTrue(Currencypicker2);
         Assert.assertEquals(currency1,currencydefault1);
         Assert.assertEquals(currency2,currencydefault2);
     }
 
     @Test
-    public void
+    public void update_exchange_currency() {
+        WebDriverWait waiter = new WebDriverWait(this.driver, Duration.ofSeconds(15));
+        WebElement getexchangevalue = waiter.until(
+                ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[name=\"numberformat\"][tabindex=\"4\"]"))) ;
+
+//        WebElement getexchangevalue = this.driver.findElement(By.cssSelector("input[name=\"numberformat\"][tabindex=\"4\"]"));
+        String valuebefore = getexchangevalue.getAttribute("value");
+        System.out.println(valuebefore);
+
+        WebElement source1 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[1]"));
+        source1.click();
+        WebElement currency1change = this.driver.findElement(By.cssSelector("li#baseCurrency_currency_autocomplete-option-1"));
+        currency1change.click();
+        String valueafterchange1 = getexchangevalue.getAttribute("value");
+        System.out.println(valueafterchange1);
+
+//        WebElement source2 = this.driver.findElement(By.xpath("(//div[contains(@class,\"MuiAutocomplete-root\")])[2]"));
+//        source2.click();
+//        WebElement currency2change = this.driver.findElement(By.cssSelector("li#quoteCurrency_currency_autocomplete-option-2"));
+//        currency2change.click();
+//        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+//        String valueafterchange2 = getexchangevalue.getAttribute("value");
+//        System.out.println(valueafterchange2);
+        //Assert
+        Assert.assertNotEquals(valuebefore,valueafterchange1);
+//        Assert.assertNotEquals(valuebefore,valueafterchange2);
+    }
 }
